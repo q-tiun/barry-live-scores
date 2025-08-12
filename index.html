@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- ✏️ Customize this title for your league/site -->
-  <title>Barry lives scores</title>
+  <title>NBA Live scores</title>
 
   <style>
     * {
@@ -44,6 +43,7 @@
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
+      margin-bottom: 40px;
     }
 
     .nav-buttons a {
@@ -62,6 +62,31 @@
       transform: translateY(-2px);
     }
 
+    /* Schedule section styled to match page */
+    #schedule {
+      margin-top: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    #schedule h2 {
+      color: #f0f0f0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    #schedule-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    #schedule-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: 16px;
+      color: #f0f0f0;
+    }
+
     footer {
       margin-top: 60px;
       font-size: 12px;
@@ -71,22 +96,44 @@
 </head>
 <body>
 
-  <!-- ✏️ Customize your main heading -->
-  <h1>Barry's live scores</h1>
+  <h1>Welcome to NBA Karma Leauge</h1>
 
-  <!-- ✏️ Update this description to fit your league -->
-  <p>Your hub for live scores, team stats, and whatever team game scores you need!!</p>
+  <p>Your hub for live scores, team stats, and player performance in NBA karma leauge!</p>
 
   <div class="nav-buttons">
-    <!-- ✏️ Link to your custom scores and stats pages -->
     <a href="scores.html">Live Scores</a>
     <a href="stats.html">Daily Stats</a>
   </div>
 
-  <!-- ✏️ Replace with your name, handle, or league branding -->
+  <!-- Schedule Section -->
+  <section id="schedule">
+    <h2>📅 Upcoming Games</h2>
+    <ul id="schedule-list"></ul>
+  </section>
+
   <footer>
-    &copy; barry
+    &copy; @barry
   </footer>
+
+  <script>
+    async function loadSchedule() {
+      try {
+        const res = await fetch('schedule.json');
+        const games = await res.json();
+        const list = document.getElementById('schedule-list');
+        list.innerHTML = '';
+
+        games.forEach(g => {
+          const li = document.createElement('li');
+          li.textContent = `${g.date} | ${g.teams}`;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error loading schedule:', err);
+      }
+    }
+    loadSchedule();
+  </script>
 
 </body>
 </html>
