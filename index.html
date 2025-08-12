@@ -62,31 +62,6 @@
       transform: translateY(-2px);
     }
 
-    /* Schedule section styled to match page */
-    #schedule {
-      margin-top: 40px;
-      max-width: 600px;
-      width: 100%;
-    }
-
-    #schedule h2 {
-      color: #f0f0f0;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    #schedule-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    #schedule-list li {
-      padding: 10px 0;
-      border-bottom: 1px solid #2a2a2a;
-      font-size: 16px;
-      color: #f0f0f0;
-    }
-
     footer {
       margin-top: 60px;
       font-size: 12px;
@@ -103,37 +78,12 @@
   <div class="nav-buttons">
     <a href="scores.html">Live Scores</a>
     <a href="stats.html">Daily Stats</a>
+    <a href="schedule.html">Schedule</a> <!-- New schedule link -->
   </div>
-
-  <!-- Schedule Section -->
-  <section id="schedule">
-    <h2>📅 Upcoming Games</h2>
-    <ul id="schedule-list"></ul>
-  </section>
 
   <footer>
     &copy; @barry
   </footer>
-
-  <script>
-    async function loadSchedule() {
-      try {
-        const res = await fetch('schedule.json');
-        const games = await res.json();
-        const list = document.getElementById('schedule-list');
-        list.innerHTML = '';
-
-        games.forEach(g => {
-          const li = document.createElement('li');
-          li.textContent = `${g.date} | ${g.teams}`;
-          list.appendChild(li);
-        });
-      } catch (err) {
-        console.error('Error loading schedule:', err);
-      }
-    }
-    loadSchedule();
-  </script>
 
 </body>
 </html>
