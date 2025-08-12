@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>NBA Live scores</title>
-
+  <title>NBA Karma Live Scores SPA</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* Your existing styles */
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background-color: #121212;
@@ -20,70 +13,101 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
       padding: 20px;
     }
-
-    h1 {
-      font-size: 36px;
-      margin-bottom: 16px;
-      color: #ffffff;
-    }
-
-    p {
-      font-size: 16px;
-      color: #aaa;
-      margin-bottom: 40px;
-      text-align: center;
-      max-width: 600px;
-    }
-
     .nav-buttons {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
-
-    .nav-buttons a {
+    .nav-buttons button {
       background-color: #2a2a2a;
       color: #fff;
-      text-decoration: none;
+      border: none;
       padding: 14px 28px;
       font-size: 16px;
       border-radius: 10px;
-      border: 1px solid #444;
-      transition: background-color 0.2s, transform 0.2s;
+      cursor: pointer;
     }
-
-    .nav-buttons a:hover {
+    .nav-buttons button:hover {
       background-color: #444;
-      transform: translateY(-2px);
     }
-
-    footer {
-      margin-top: 60px;
-      font-size: 12px;
-      color: #666;
+    #content {
+      max-width: 600px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
 
-  <h1>Welcome to NBA Karma Leauge</h1>
-
-  <p>Your hub for live scores, team stats, and player performance in NBA karma leauge!</p>
+  <h1>Welcome to NBA Karma League</h1>
 
   <div class="nav-buttons">
-    <a href="scores.html">Live Scores</a>
-    <a href="stats.html">Daily Stats</a>
-    <a href="schedule.html">Schedule</a> <!-- New schedule link -->
+    <button data-page="home">Home</button>
+    <button data-page="scores">Live Scores</button>
+    <button data-page="stats">Daily Stats</button>
+    <button data-page="schedule">Schedule</button>
   </div>
 
-  <footer>
-    &copy; @barry
-  </footer>
+  <div id="content">
+    <!-- Content will load here -->
+    <p>Welcome! Click the buttons above to load content.</p>
+  </div>
+
+  <script>
+    const contentDiv = document.getElementById('content');
+
+    // Map page names to their HTML content or fetch URLs
+    const pages = {
+      home: `<p>Your hub for live scores, team stats, and player performance in NBA Karma League!</p>`,
+      scores: `<h2>Live Scores</h2><p>Loading live scores...</p>`, // replace with actual scores content or fetch
+      stats: `<h2>Daily Stats</h2><p>Loading daily stats...</p>`, // replace with actual stats content or fetch
+      schedule: `<h2>📅 Upcoming Games</h2><ul id="schedule-list"></ul>`,
+    };
+
+    // Load schedule JSON data and render it inside schedule page
+    async function loadSchedule() {
+      try {
+        const res = await fetch('schedule.json');
+        const games = await res.json();
+        const list = document.getElementById('schedule-list');
+        list.innerHTML = '';
+        games.forEach(g => {
+          const li = document.createElement('li');
+          li.textContent = `${g.date} | ${g.teams}`;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error loading schedule:', err);
+        document.getElementById('schedule-list').textContent = 'Failed to load schedule.';
+      }
+    }
+
+    // Function to load content by page
+    function loadPage(page) {
+      if (!pages[page]) {
+        contentDiv.innerHTML = '<p>Page not found.</p>';
+        return;
+      }
+      contentDiv.innerHTML = pages[page];
+
+      if (page === 'schedule') {
+        loadSchedule();
+      }
+      // You can add similar fetch/load calls for 'scores' and 'stats'
+    }
+
+    // Add click listeners to buttons
+    document.querySelectorAll('.nav-buttons button').forEach(button => {
+      button.addEventListener('click', () => {
+        loadPage(button.dataset.page);
+      });
+    });
+
+    // Load home content by default
+    loadPage('home');
+  </script>
 
 </body>
 </html>
